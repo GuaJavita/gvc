@@ -9,8 +9,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        arch: [x64, arm64]  # Add arm64 for Apple Silicon support
+        os: [ubuntu-latest]
+        arch: [x64]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17'  # or your desired Java version
+          java-version: '17'
           cache: 'maven'
 
       - name: Test,Compile and Build
@@ -30,7 +30,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/shaded/*  # Adjust the file path to your release artifacts
+          files: target/shaded/* 
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
