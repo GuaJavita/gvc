@@ -86,6 +86,19 @@
                 <javacpp.platform>linux-x86_64</javacpp.platform>
             </properties>
         </profile>
+        <profile>
+            <id>macosx-arm64</id>
+            <activation>
+                <os>
+                    <name>Mac OS X</name>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <javacpp.platform>macosx-arm64</javacpp.platform>
+            </properties>
+        </profile>
     </profiles>
 </project>
 
