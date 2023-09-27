@@ -30,8 +30,22 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/shaded/* 
+          files: target/shaded/*
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+permissions:
+  actions: none
+  checks: none
+  contents: read
+  deployments: none
+  id-token: none
+  issues: read
+  discussions: none
+  packages: write
+  pages: none
+  pull-requests: none
+  repository-projects: none
+  security-events: none
+  statuses: none
