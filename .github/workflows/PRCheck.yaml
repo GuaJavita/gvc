@@ -1,0 +1,28 @@
+name: Check PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        arch: [x64]  # Add arm64 for Apple Silicon support
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # or your desired Java version
+          cache: 'maven'
+
+      - name: Test,Compile and Build
+        run: make test

@@ -5,14 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.guajavita</groupId>
-    <artifactId>jvc</artifactId>
+    <artifactId>gvc</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <exec.mainClass>Factorial</exec.mainClass>
+        <exec.mainClass>org.guajavita.Main</exec.mainClass>
         <org.bytedeco>1.5.10-SNAPSHOT</org.bytedeco>
         <llvm>17.0.1</llvm>
         <libffi>3.4.4</libffi>
@@ -43,7 +44,11 @@
     </dependencies>
 
     <build>
+
         <plugins>
+
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -55,12 +60,14 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>jvc</finalName>
+                            <finalName>gvc-${javacpp.platform}</finalName>
+                            <outputDirectory>${project.build.directory}/shaded</outputDirectory>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>org.guajavita.Main</Main-Class>
-                                        <Build-Number>123</Build-Number>
+                                        <Main-Class>${exec.mainClass}</Main-Class>
+                                        <!--suppress UnresolvedMavenProperty -->
+                                        <Build-Number>${git.commit.id.abbrev}</Build-Number>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
@@ -68,7 +75,42 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>5.0.0</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+<!--                    <includeOnlyProperties>-->
+<!--                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>-->
+<!--                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>-->
+<!--                    </includeOnlyProperties>-->
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>filtering-java-templates</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
