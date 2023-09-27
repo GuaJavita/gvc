@@ -1,0 +1,46 @@
+name: Check PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x64, arm64]  # Add arm64 for Apple Silicon support
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # or your desired Java version
+          cache: 'maven'
+
+      - name: Test,Compile and Build
+        run: make test
+
+      - name: Add PR Comment On Failure
+        if: failure()  # This step runs only if the previous step fails
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const comment = `
+              :x: Compilation failed for this pull request.
+              Please check the build logs and make necessary fixes.
+            `;
+            github.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment,
+            });
