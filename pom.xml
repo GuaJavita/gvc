@@ -141,6 +141,18 @@
                 <javacpp.platform>macosx-arm64</javacpp.platform>
             </properties>
         </profile>
+        <profile>
+            <id>windows-x86_64</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <javacpp.platform>windows-x86_64</javacpp.platform>
+            </properties>
+        </profile>
     </profiles>
 </project>
 
