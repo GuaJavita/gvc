@@ -16,3 +16,9 @@ git clone https://github.com/GuaJavita/jvc.git
 make 
 ```
 
+### Sample run 
+
+```shell
+java -jar  target/shaded/gvc-linux-x86_64.jar compile src/test/resources/HelloWorld.gjv
+```
+
