@@ -10,7 +10,7 @@ package org.guajavita.parser;
 
 program:
                	packageClause eos (importDecl eos)* (
-               		(function ) eos
+               		(defDeclaration | function ) eos
                	)* EOF;
 
 
@@ -43,6 +43,7 @@ primitives:     'void'
 typedefName:
                 IDENTIFIER ;
 
+defDeclaration: DEF IDENTIFIER ASSIGN expression;
 
 block:
                 L_CURLY statement? R_CURLY;
@@ -50,7 +51,9 @@ block:
 
 statement:      RETURN expression? ;
 
-expression:     SEMI;
+expression:     SEMI
+                | DECIMALS
+                | DECIMAL_FLOAT_LIT;
 
 eos:
                 SEMI

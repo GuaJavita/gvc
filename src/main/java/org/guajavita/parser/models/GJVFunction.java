@@ -1,4 +1,4 @@
-package org.guajavita.parser;
+package org.guajavita.parser.models;
 
 import java.util.List;
 

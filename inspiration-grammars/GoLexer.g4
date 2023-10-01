@@ -1,13 +1,68 @@
-lexer grammar GuajavitaLexer;
-@header {
-package org.guajavita.parser;
-}
+/*
+ [The "BSD licence"]
+ Copyright (c) 2017 Sasa Coh, Michał Błotniak
+ Copyright (c) 2019 Ivan Kochurkin, kvanttt@gmail.com, Positive Technologies
+ Copyright (c) 2019 Dmitry Rassadin, flipparassa@gmail.com, Positive Technologies
+ Copyright (c) 2021 Martin Mirchev, mirchevmartin2203@gmail.com
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*
+ * A Go grammar for ANTLR 4 derived from the Go Language Specification
+ * https://golang.org/ref/spec
+ */
+
+lexer grammar GoLexer;
 
 // Keywords
-PACKAGE           : 'package';
-IMPORT            : 'import';
-RETURN            : 'return';
-DEF               : 'def';
+
+BREAK                  : 'break' -> mode(NLSEMI);
+DEFAULT                : 'default';
+FUNC                   : 'func';
+INTERFACE              : 'interface';
+SELECT                 : 'select';
+CASE                   : 'case';
+DEFER                  : 'defer';
+GO                     : 'go';
+MAP                    : 'map';
+STRUCT                 : 'struct';
+CHAN                   : 'chan';
+ELSE                   : 'else';
+GOTO                   : 'goto';
+PACKAGE                : 'package';
+SWITCH                 : 'switch';
+CONST                  : 'const';
+FALLTHROUGH            : 'fallthrough' -> mode(NLSEMI);
+IF                     : 'if';
+RANGE                  : 'range';
+TYPE                   : 'type';
+CONTINUE               : 'continue' -> mode(NLSEMI);
+FOR                    : 'for';
+IMPORT                 : 'import';
+RETURN                 : 'return' -> mode(NLSEMI);
+VAR                    : 'var';
 
 NIL_LIT                : 'nil' -> mode(NLSEMI);
 
@@ -22,7 +77,14 @@ R_CURLY                : '}' -> mode(NLSEMI);
 L_BRACKET              : '[';
 R_BRACKET              : ']' -> mode(NLSEMI);
 ASSIGN                 : '=';
-
+COMMA                  : ',';
+SEMI                   : ';';
+COLON                  : ':';
+DOT                    : '.';
+PLUS_PLUS              : '++' -> mode(NLSEMI);
+MINUS_MINUS            : '--' -> mode(NLSEMI);
+DECLARE_ASSIGN         : ':=';
+ELLIPSIS               : '...';
 
 // Logical
 
@@ -85,6 +147,14 @@ fragment HEX_EXPONENT  : [pP] [+-]? DECIMALS;
 
 
 IMAGINARY_LIT          : (DECIMAL_LIT | BINARY_LIT |  OCTAL_LIT | HEX_LIT | FLOAT_LIT) 'i' -> mode(NLSEMI);
+
+// Rune literals
+
+fragment RUNE               : '\'' (UNICODE_VALUE | BYTE_VALUE) '\'';//: '\'' (~[\n\\] | ESCAPED_VALUE) '\'';
+
+RUNE_LIT                : RUNE -> mode(NLSEMI);
+
+
 
 BYTE_VALUE : OCTAL_BYTE_VALUE | HEX_BYTE_VALUE;
 
